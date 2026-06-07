@@ -1,5 +1,3 @@
--- This file was leaked by S4turns Soc1ety - Gtvz You are Skidder
-
 local genv = getgenv()
 
  s = Instance.new("Sky")
