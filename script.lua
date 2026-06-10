@@ -14,7 +14,6 @@ local Players = game:GetService("Players")
 local RE = game:GetService("ReplicatedStorage"):WaitForChild("RE")
 local remote = RE:FindFirstChild("1RPNam1eColo1r")
 
--- Lerp entre duas cores
 local function lerpColor(c1, c2, t)
 	return Color3.new(
 		c1.R + (c2.R - c1.R) * t,
@@ -23,21 +22,20 @@ local function lerpColor(c1, c2, t)
 	)
 end
 
--- Função que aplica o RGB constantemente
 local function startRGBLoop()
 	task.spawn(function()
 		local black = Color3.new(0, 0, 0)
 		local green = Color3.fromRGB(0, 255, 0)
 
 		while true do
-			-- Preto  Verde
+
 			for t = 0, 1, 0.02 do
 				if remote then
 					remote:FireServer("PickingRPBioColor", lerpColor(black, green, t))
 				end
 				task.wait(0.03)
 			end
-			-- Verde  Preto
+
 			for t = 1, 0, -0.02 do
 				if remote then
 					remote:FireServer("PickingRPBioColor", lerpColor(black, green, t))
@@ -48,12 +46,10 @@ local function startRGBLoop()
 	end)
 end
 
--- Inicia o loop uma vez
 startRGBLoop()
 
--- Reinicia o loop ao respawnar
 Players.LocalPlayer.CharacterAdded:Connect(function()
-	-- Espera um pouco após spawn
+
 	task.wait(1)
 	startRGBLoop()
 end)
@@ -102,7 +98,6 @@ local Tab = Window:MakeTab({"TELEPORT", "tp"})
 local Tabmusic = Window:MakeTab({"TROLL AUDIO", "music"})
 local CarTab = Window:MakeTab({"VEÍCULO", "car"})
 local Tabconfg = Window:MakeTab({ Title = "CONFIG", Icon = "settings" })
-----------------------------------------------------------------
 
 Tabstatus:AddSection({ Name = "STATUS" })
 
@@ -129,7 +124,6 @@ Tabstatus:AddParagraph({"MÁXIMO NO SERVIDOR", tostring(game.Players.MaxPlayers)
 
 local currentPlayersParagraph = Tabstatus:AddParagraph({"JOGADORES", tostring(#game.Players:GetPlayers())})
 
--- Atualiza quantidade de jogadores em tempo real
 task.spawn(function()
     while true do
         task.wait(1)
@@ -234,7 +228,7 @@ until Server
 TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer)
     end,
 })
-----------------------------------------------------------------
+
 
 InfoTab:AddDiscordInvite({
     Name = "GTVZ HUB",
@@ -246,7 +240,7 @@ InfoTab:AddDiscordInvite({
 InfoTab:AddParagraph({"DESENVOLVENDO : GTVZ MODDED", })
 
 InfoTab:AddParagraph({"EQUIPE : GTXMIX",})
-----------------------------------------------------------------
+
 
 local Section = Tabjogado:AddSection({
     Name = "JOGADOR"
@@ -265,12 +259,10 @@ local player = game.Players.LocalPlayer
 local connection = nil
 local running = false
 
--- Variáveis para armazenar os valores atuais
 local currentWalkSpeed = 16
 local currentJumpPower = 50
 local currentGravity = 196.2
 
--- Função para aplicar noclip
 local function ativarNoclip()
     if running then return end
     running = true
@@ -284,7 +276,6 @@ local function ativarNoclip()
     end)
 end
 
--- Função para desativar noclip
 local function desativarNoclip()
     running = false
     if connection then
@@ -293,7 +284,6 @@ local function desativarNoclip()
     end
 end
 
--- Função para obter o Humanoid com segurança
 local function getHumanoid()
     if player.Character and player.Character:FindFirstChild("Humanoid") then
         return player.Character.Humanoid
@@ -301,9 +291,8 @@ local function getHumanoid()
     return nil
 end
 
--- Função para restaurar todos os valores no novo personagem
 local function onCharacterAdded(character)
-    -- Aguarda o Humanoid carregar
+
     local humanoid = character:WaitForChild("Humanoid", 5)
     if humanoid then
         humanoid.WalkSpeed = currentWalkSpeed
@@ -312,15 +301,12 @@ local function onCharacterAdded(character)
     end
 end
 
--- Reconecta quando o personagem respawna
 player.CharacterAdded:Connect(onCharacterAdded)
 
--- Aplica valores iniciais se o personagem já existir
 if player.Character then
     onCharacterAdded(player.Character)
 end
 
--- Toggle do Noclip
 Tabjogado:AddToggle({
     Name = "ATRAVESSAR PAREDE",
     Callback = function(value)
@@ -332,7 +318,6 @@ Tabjogado:AddToggle({
     end
 })
 
--- Velocidade do jogador
 Tabjogado:AddTextBox({
     Name = "VELOCIDADE JOGADOR",
     PlaceholderText = "DIGITE A VELOCIDADE",
@@ -350,7 +335,6 @@ Tabjogado:AddTextBox({
     end
 })
 
--- Resetar velocidade
 Tabjogado:AddButton({
     Name = "RESETAR VELOCIDADE",
     Callback = function()
@@ -362,7 +346,6 @@ Tabjogado:AddButton({
     end
 })
 
--- Altura do pulo
 Tabjogado:AddTextBox({
     Name = "ALTURA DO PULO",
     PlaceholderText = "DIGITE ALTURA PULO",
@@ -381,7 +364,6 @@ Tabjogado:AddTextBox({
     end
 })
 
--- Resetar pulo
 Tabjogado:AddButton({
     Name = "RESETAR PULO",
     Callback = function()
@@ -394,7 +376,6 @@ Tabjogado:AddButton({
     end
 })
 
--- Gravidade
 Tabjogado:AddTextBox({
     Name = "GRAVIDADE",
     PlaceholderText = "DIGITE GRAVIDADE",
@@ -409,7 +390,6 @@ Tabjogado:AddTextBox({
     end
 })
 
--- Resetar gravidade
 Tabjogado:AddButton({
     Name = "RESETAR GRAVIDADE",
     Callback = function()
@@ -496,7 +476,6 @@ local function disableESP()
     print("ESP desativado.")
 end
 
--- Toggle no Tabjogado
 Tabjogado:AddToggle({
     Name = "ESP NOME DISTANCIA",
     Default = false,
@@ -526,14 +505,14 @@ local connections = {}
 local Storage = nil
 
 local function EnableESP()
-    if Storage then return end -- já ativado
+    if Storage then return end 
 
     Storage = Instance.new("Folder")
     Storage.Parent = CoreGui
     Storage.Name = "Highlight_Storage"
 
     local function Highlight(plr)
-        if plr == lp then return end -- ignora o próprio jogador
+        if plr == lp then return end
 
         local highlight = Instance.new("Highlight")
         highlight.Name = plr.Name
@@ -579,7 +558,6 @@ local function DisableESP()
     print("ESP Highlight desativado.")
 end
 
--- Toggle no Tabjogado
 Tabjogado:AddToggle({
     Name = "ESP HOLOGRAMA",
     Default = false,
@@ -592,7 +570,6 @@ Tabjogado:AddToggle({
     end
 })
 
--------------------------PRICIPAL---------------------------------------
 
 Tabprici:AddSection({ Name = "PRINCIPAL" })
 
@@ -608,12 +585,10 @@ Tabprici:AddToggle({
     end
 })
 
--- Serviços
 local Players = game:GetService("Players")
 local RE = game:GetService("ReplicatedStorage"):WaitForChild("RE")
 local remote = RE:FindFirstChild("1RPNam1eColo1r")
 
--- Função para interpolar entre duas cores
 local function lerpColor(c1, c2, t)
 	return Color3.new(
 		c1.R + (c2.R - c1.R) * t,
@@ -622,7 +597,6 @@ local function lerpColor(c1, c2, t)
 	)
 end
 
--- Paleta RGB + cores gama
 local colorList = {
 	Color3.fromRGB(255, 0, 0),
 	Color3.fromRGB(255, 102, 0),
@@ -641,11 +615,9 @@ local colorList = {
 	Color3.fromRGB(204, 153, 255)
 }
 
--- Controle do loop RGB
 local loopRunning = false
 local rgbThread = nil
 
--- Início da animação RGB com transição suave
 function startRGBLoop()
 	if loopRunning then return end
 	loopRunning = true
@@ -666,7 +638,6 @@ function startRGBLoop()
 	end)
 end
 
--- Parar animação RGB
 function stopRGBLoop()
 	loopRunning = false
 end
@@ -684,7 +655,6 @@ Tabprici:AddToggle({
     end
 })
 
--- Lista de cores RGB para o corpo
 local bodyColors = {
     "Bright red",
     "Lime green",
@@ -776,7 +746,6 @@ local Dropdown = Tabprici:AddDropdown({
     end
 })
 
--- // Atualizar Dropdown dinamicamente
 local function UpdateDropdown()
     Dropdown:Refresh(GetPlayerNames(), true)
 end
@@ -784,7 +753,6 @@ end
 Players.PlayerAdded:Connect(UpdateDropdown)
 Players.PlayerRemoving:Connect(UpdateDropdown)
 
--- // Botão: Copiar Avatar
 Tabprici:AddButton({
     Name = "COPIAR AVATAR",
     Callback = function()
@@ -826,10 +794,8 @@ Tabprici:AddButton({
             task.wait(0.2)
         end
 
-        -- // Copiar do jogador selecionado
         local PDesc = THumanoid:GetAppliedDescription()
 
-        -- Trocar corpo
         local argsBody = {
             [1] = {
                 [1] = PDesc.Torso,
@@ -843,7 +809,6 @@ Tabprici:AddButton({
         Remotes.ChangeCharacterBody:InvokeServer(unpack(argsBody))
         task.wait(0.5)
 
-        -- Aplicar roupas e face
         if tonumber(PDesc.Shirt) then
             Remotes.Wear:InvokeServer(tonumber(PDesc.Shirt))
             task.wait(0.3)
@@ -859,7 +824,6 @@ Tabprici:AddButton({
             task.wait(0.3)
         end
 
-        -- Aplicar acessórios
         for _, acc in ipairs(PDesc:GetAccessories(true)) do
             if acc.AssetId and tonumber(acc.AssetId) then
                 Remotes.Wear:InvokeServer(tonumber(acc.AssetId))
@@ -867,14 +831,12 @@ Tabprici:AddButton({
             end
         end
 
-        -- Copiar cor de pele
         local SkinColor = TPlayer.Character:FindFirstChild("Body Colors")
         if SkinColor then
             Remotes.ChangeBodyColor:FireServer(tostring(SkinColor.HeadColor))
             task.wait(0.3)
         end
 
-        -- Copiar animação (Idle)
         if tonumber(PDesc.IdleAnimation) then
             Remotes.Wear:InvokeServer(tonumber(PDesc.IdleAnimation))
             task.wait(0.3)
@@ -886,7 +848,6 @@ Tabprici:AddButton({
 
 
 
------------------------=TROLL=---------------------------------------
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -903,7 +864,6 @@ local Character = LocalPlayer.Character
 local Humanoid = Character and Character:WaitForChild("Humanoid")
 local RootPart = Character and Character:WaitForChild("HumanoidRootPart")
 
--- Função para limpar o sofá (couch)
 local function cleanupCouch()
     local char = LocalPlayer.Character
     if char then
@@ -912,31 +872,28 @@ local function cleanupCouch()
             couch:Destroy()
         end
     end
-    -- Limpar ferramentas via remoto
+
     ReplicatedStorage:WaitForChild("RE"):WaitForChild("1Clea1rTool1s"):FireServer("ClearAllTools")
 end
 
--- Conectar evento CharacterAdded
 LocalPlayer.CharacterAdded:Connect(function(newCharacter)
     Character = newCharacter
     Humanoid = newCharacter:WaitForChild("Humanoid")
     RootPart = newCharacter:WaitForChild("HumanoidRootPart")
     cleanupCouch()
-    
-    -- Conectar evento Died para o novo Humanoid
+
+		
     Humanoid.Died:Connect(function()
         cleanupCouch()
     end)
 end)
 
--- Conectar evento Died para o Humanoid inicial, se existir
 if Humanoid then
     Humanoid.Died:Connect(function()
         cleanupCouch()
     end)
 end
 
--- Função KillPlayerCouch
 local function KillPlayerCouch()
     if not selectedPlayerName then
         warn("Erro: Nenhum jogador selecionado")
@@ -1032,7 +989,6 @@ local function KillPlayerCouch()
     end)
 end
 
--- Função BringPlayerLLL
 local function BringPlayerLLL()
     if not selectedPlayerName then
         warn("Erro: Nenhum jogador selecionado")
@@ -1131,7 +1087,6 @@ local function BringPlayerLLL()
     end)
 end
 
--- Função BringWithCouch
 local function BringWithCouch()
     local targetPlayer = Players:FindFirstChild(getgenv().Target)
     if not targetPlayer then
@@ -1215,7 +1170,6 @@ local function BringWithCouch()
     ReplicatedStorage.RE["1Clea1rTool1s"]:FireServer("ClearAllTools")
 end
 
--- Função KillWithCouch
 local function KillWithCouch()
     local targetPlayer = Players:FindFirstChild(getgenv().Target)
     if not targetPlayer then
@@ -1301,7 +1255,6 @@ end
 
     local PlayerSection = Troll:AddSection({ Name = "Troll Player" })
 
-    -- Função para obter lista de jogadores
     local function getPlayerList()
         local players = Players:GetPlayers()
         local playerNames = {}
@@ -1539,7 +1492,7 @@ end
             elseif methodKill == "SOFA V2" then
                 BringWithCouch()
             else
-                -- Método de ônibus
+				
                 local character = LocalPlayer.Character
                 local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
                 if not humanoidRootPart then
@@ -1645,8 +1598,8 @@ local function houseBanKill()
             if not House then
                 local EHouse
                 local availableHouses = {}
-                
-                -- Coletar todas as casas disponÃ­veis ("For Sale")
+
+				
                 for _, Lot in pairs(Houses:GetChildren()) do
                     if Lot.Name == "For Sale" then
                         for _, num in pairs(Lot:GetDescendants()) do
@@ -1658,13 +1611,12 @@ local function houseBanKill()
                     end
                 end
 
-                -- Escolher uma casa aleatÃ³ria da lista
+
                 if #availableHouses > 0 then
                     local randomHouse = availableHouses[math.random(1, #availableHouses)]
                     EHouse = randomHouse.Lot
                     local houseNumber = randomHouse.Number
 
-                    -- Teleportar para o BuyDetector e clicar
                     local BuyDetector = EHouse:FindFirstChild("BuyHouse")
                     Pos = BuyDetector.Position
                     if BuyDetector and BuyDetector:IsA("BasePart") then
@@ -1676,11 +1628,11 @@ local function houseBanKill()
                         end
                     end
 
-                    -- Disparar o novo remote event para construir a casa
+
                     task.wait(0.5)
                     local args = {
-                        houseNumber, -- NÃºmero da casa aleatÃ³ria
-                        "056_House" -- Tipo da casa
+                        houseNumber,
+                        "056_House" 
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("Lot:BuildProperty"):FireServer(unpack(args))
                 else
@@ -1864,7 +1816,6 @@ local function iniciarLoopScript()
     end)()
 end
 
--- Toggle final e seguro
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local flingAtivo = false
@@ -1941,7 +1892,6 @@ local function iniciarLoopScript()
     end)()
 end
 
--- Toggle final com desequipar ao desligar
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local flingAtivo = false
@@ -2018,7 +1968,6 @@ local function iniciarLoopScript()
     end)()
 end
 
--- Toggle final sem deletar sofá
 Troll:AddToggle({
 	Name = "FLING FATAL=",
 	Default = false,
@@ -2030,12 +1979,12 @@ Troll:AddToggle({
 		local selected = getgenv().Target
 
 		if ativo and selected then
-			-- Salvar posição original
+
 			if hrp then
 				posicaoOriginal = hrp.CFrame
 			end
 
-			-- Se não tiver o sofá nem equipado nem no backpack, tenta pegar
+
 			local temCouch = LocalPlayer.Backpack:FindFirstChild("Couch") or (char and char:FindFirstChild("Couch"))
 			if not temCouch then
 				local args = { [1] = "PickingTools", [2] = "Couch" }
@@ -2047,7 +1996,6 @@ Troll:AddToggle({
 				end
 			end
 
-			-- Esperar sofá aparecer no backpack e equipar se ainda não estiver
 			task.spawn(function()
 				local maxTries, tries = 30, 0
 				repeat
@@ -2064,13 +2012,13 @@ Troll:AddToggle({
 			iniciarLoopScript()
 
 		else
-			-- Desequipar sofá se estiver na mão (vai pra mochila)
+
 			local tool = char and char:FindFirstChild("Couch")
 			if tool then
 				tool.Parent = LocalPlayer.Backpack
 			end
 
-			-- Resetar corpo e posição com segurança
+				
 			if hrp and posicaoOriginal then
 				hrp.Velocity = Vector3.zero
 				hrp.RotVelocity = Vector3.zero
@@ -2137,12 +2085,12 @@ local function FlingBall(target)
             local StartTime = os.time()
             repeat
                 if troot.Velocity.Magnitude > 0 then
-                -- Cálculo da posição ajustada com base na velocidade do alvo
+
                 local pos_x = troot.Position.X + (troot.Velocity.X / 1.5)
                 local pos_y = troot.Position.Y + (troot.Velocity.Y / 1.5)
                 local pos_z = troot.Position.Z + (troot.Velocity.Z / 1.5)
 
-                -- Posiciona a bola diretamente na posição ajustada
+
                 local position = Vector3.new(pos_x, pos_y, pos_z)
                 Ball.CFrame = CFrame.new(position)
                 Ball.Orientation += Vector3.new(45, 60, 30)
@@ -2549,7 +2497,7 @@ local LocalPlayer = Players.LocalPlayer
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HRP = Character:WaitForChild("HumanoidRootPart")
 
--- Alvo invisível (BlackHole)
+
 local BlackHole = Instance.new("Part")
 BlackHole.Size = Vector3.new(100000, 100000, 100000)
 BlackHole.Transparency = 1
@@ -2558,20 +2506,18 @@ BlackHole.CanCollide = false
 BlackHole.Name = "BlackHoleTarget"
 BlackHole.Parent = Workspace
 
--- Attachment base no BlackHole
+
 local baseAttachment = Instance.new("Attachment")
 baseAttachment.Name = "Luscaa_BlackHoleAttachment"
 baseAttachment.Parent = BlackHole
 
--- Atualiza posição do BlackHole
+
 RunService.Heartbeat:Connect(function()
 	BlackHole.CFrame = HRP.CFrame
 end)
 
--- Lista de portas controladas
 local ControlledDoors = {}
 
--- Prepara uma porta para ser controlada
 local function SetupPart(part)
 	if not part:IsA("BasePart") or part.Anchored or not string.find(part.Name, "Door") then return end
 	if part:FindFirstChild("Luscaa_Attached") then return end
@@ -2608,21 +2554,18 @@ local function SetupPart(part)
 	table.insert(ControlledDoors, {Part = part, Align = align})
 end
 
--- Detecta e prepara portas existentes
 for _, obj in ipairs(Workspace:GetDescendants()) do
 	if obj:IsA("BasePart") and string.find(obj.Name, "Door") then
 		SetupPart(obj)
 	end
 end
 
--- Novas portas no futuro
 Workspace.DescendantAdded:Connect(function(obj)
 	if obj:IsA("BasePart") and string.find(obj.Name, "Door") then
 		SetupPart(obj)
 	end
 end)
 
--- Flinga jogador com timeout e retorno
 local function FlingPlayer(player)
 	local char = player.Character
 	if not char then return end
@@ -2652,7 +2595,6 @@ local function FlingPlayer(player)
 		RunService.Heartbeat:Wait()
 	end
 
-	-- Sempre retorna as portas
 	for _, data in ipairs(ControlledDoors) do
 		if data.Align then
 			data.Align.Attachment1 = baseAttachment
@@ -2660,7 +2602,6 @@ local function FlingPlayer(player)
 	end
 end
 
--- Clique (funciona no mobile)
 UserInputService.TouchTap:Connect(function(touchPositions, processed)
 	if processed then return end
 	local pos = touchPositions[1]
@@ -2847,7 +2788,6 @@ if not mochila:FindFirstChild(NOME_FERRAMENTA) then
 	ferramenta.Parent = mochila
 end
 
--- Função FlingBall (bola)
 local function FlingBall(target)
     
 
@@ -2921,7 +2861,6 @@ local function FlingBall(target)
     end
 end
 
--- Toque na tela para aplicar a bola
 entrada.TouchTap:Connect(function(toques, processado)
 	if not ferramentaEquipada or processado then return end
 	local pos = toques[1]
